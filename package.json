@@ -18,6 +18,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
+    "prebuild": "npm install --legacy-peer-deps",
     "build": "vite build",
     "lint": "eslint \"src/**/*.js\"",
     "serve": "vite preview",
