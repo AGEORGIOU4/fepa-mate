@@ -14,7 +14,7 @@ export const CSetup = () => {
   const [player1, setPlayer1] = useState("Player 1");
   const [player2, setPlayer2] = useState("Player 2");
   const [raceTo, setRaceTo] = useState(5);
-  const [numberOfSets, setNumberOfSets] = useState(2);
+  const [numberOfSets, setNumberOfSets] = useState(1);
 
 
   const handleSubmit = (event) => {
@@ -97,6 +97,7 @@ export const CSetup = () => {
                   type="number"
                   min={1}
                   max={5}
+                  disabled
                   value={numberOfSets}
                   onChange={(e) => setNumberOfSets(Number(e.target.value))}
                 />

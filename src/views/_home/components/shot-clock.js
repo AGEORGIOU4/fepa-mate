@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CCol, CButton, CRow } from "@coreui/react-pro";
 
 export const CShotClock = () => {
@@ -7,22 +7,27 @@ export const CShotClock = () => {
   const [timer, setTimer] = useState(null); // Timer reference
   const [isRunning, setIsRunning] = useState(false); // Track if the clock is running
   const [selectedTime, setSelectedTime] = useState(60); // Track the selected time
-
   const [hasBeeped, setHasBeeped] = useState(false); // Track if beep has been triggered
+
+  // Track whether players have used their extension
+  const [p1ExtensionUsed, setP1ExtensionUsed] = useState(false);
+  const [p2ExtensionUsed, setP2ExtensionUsed] = useState(false);
 
   // Circumference based on radius 80 (for circle with width/height 160)
   const radius = 90;
   const circumference = 2 * Math.PI * radius;
 
   // Load the beep sound (you can replace the URL with your sound file)
-  const beepSound = new Audio('/beep.mp4'); // Make sure to place beep.mp3 in your public folder or use a valid URL
+  const beepSoundRef = useRef(new Audio('/beep.mp4')); // Reference to the beep sound
+  const beep15 = new Audio('/15seconds.m4a'); // Make sure to place beep.mp3 in your public folder or use a valid URL
+  const beep5 = new Audio('/5seconds.m4a'); // Make sure to place beep.mp3 in your public folder or use a valid URL
 
   // Function to determine the stroke color based on time remaining
   const getStrokeColor = (time) => {
     if (time > 45) {
       return "#51cc8a"; // Green for 45s-60s
     } else if (time > 30) {
-      return "#51cc8a"; // Green for 30s-45s (this is to cover up to 45s)
+      return "#51cc8a"; // Green for 30s-45s
     } else if (time > 15) {
       return "#ffc107"; // Yellow for 15s-30s
     } else {
@@ -32,13 +37,19 @@ export const CShotClock = () => {
 
   // Play beep sound if within danger zones
   const playBeepIfNeeded = (time) => {
-    if (time <= 5 && !hasBeeped) {
-      beepSound.play(); // Play beep sound
-      setHasBeeped(true); // Mark beep as triggered
-    } else if (time > 30 && hasBeeped) {
-      setHasBeeped(false); // Reset beep flag once time goes above the danger zone
+    if (time <= 5) {
+      beepSoundRef.current.play(); // Play the beep sound
     }
   };
+
+  const pauseBeep = () => {
+    beepSoundRef.current.pause(); // Stop the beep sound
+  };
+  const stopBeep = () => {
+    beepSoundRef.current.pause(); // Stop the beep sound
+    beepSoundRef.current.currentTime = 0; // Reset the beep sound to the beginning
+  };
+
 
   // Start or pause the shot clock countdown
   const startShotClock = () => {
@@ -67,6 +78,7 @@ export const CShotClock = () => {
   };
 
   const toggleShotClock = () => {
+    pauseBeep(); // Stop the beep sound if it's playing
     if (isRunning) {
       stopShotClock(); // Stop the timer
     } else {
@@ -77,28 +89,58 @@ export const CShotClock = () => {
 
   // Reset shot clock to the selected time
   const resetShotClock = (time) => {
+    stopBeep(); // Stop the beep sound if it's playing
     setShotClock(time);
     stopShotClock(); // Clear the current timer
     setIsRunning(false); // Stop the clock when reset
+    setP1ExtensionUsed(false); // Reset player 1 extension
+    setP2ExtensionUsed(false); // Reset player 2 extension
   };
 
   // Handle the click on the circle to reset the timer and start countdown
   const handleCircleClick = () => {
-    resetShotClock(selectedTime); // Reset to selected time
-    startShotClock(); // Start the countdown immediately
-    setIsRunning(true); // Mark the clock as running
+    toggleShotClock()
   };
 
   // Restart the shot clock and start immediately
   const restartShotClock = () => {
-    resetShotClock(selectedTime); // Reset to the selected time
+    stopBeep(); // Stop the beep sound if it's playing
+    setShotClock(selectedTime);
+    stopShotClock(); // Clear the current timer
+    setIsRunning(false); // Stop the clock when reset
     startShotClock(); // Start the countdown immediately after reset
     setIsRunning(true); // Mark the clock as running
+  };
+
+  // Extension for Player 1
+  const handleP1Extension = () => {
+    stopBeep(); // Stop the beep sound if it's playing
+    if (!p1ExtensionUsed) {
+      setShotClock(prev => prev + 15); // Add 15 seconds to the shot clock
+      setP1ExtensionUsed(true); // Mark player 1 extension as used
+    }
+  };
+
+  // Extension for Player 2
+  const handleP2Extension = () => {
+    stopBeep(); // Stop the beep sound if it's playing
+    if (!p2ExtensionUsed) {
+      setShotClock(prev => prev + 15); // Add 15 seconds to the shot clock
+      setP2ExtensionUsed(true); // Mark player 2 extension as used
+    }
   };
 
   useEffect(() => {
     // Cleanup on component unmount
     return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [timer]);
+
+  useEffect(() => {
+    // Cleanup on component unmount
+    return () => {
+      pauseBeep(); // Stop beep if playing
       if (timer) clearInterval(timer);
     };
   }, [timer]);
@@ -219,6 +261,7 @@ export const CShotClock = () => {
       {/* Restart button */}
       <CButton
         className="timer-button"
+        disabled={!isRunning ? true : false}
         onClick={restartShotClock} // Reset and start immediately
         style={{
           position: "absolute",
@@ -230,6 +273,39 @@ export const CShotClock = () => {
         }}
       >
         Restart
+      </CButton>
+
+      {/* Extension buttons */}
+      <CButton
+        onClick={handleP1Extension}
+        disabled={p1ExtensionUsed} // Disable after use
+        style={{
+          position: "absolute",
+          left: 100,
+          top: 10,
+          width: "100px",
+          height: "60px",
+          color: 'white',
+          background: p1ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
+        }}
+      >
+        P1 Extension
+      </CButton>
+
+      <CButton
+        onClick={handleP2Extension}
+        disabled={p2ExtensionUsed} // Disable after use
+        style={{
+          position: "absolute",
+          right: 100,
+          top: 10,
+          width: "100px",
+          height: "60px",
+          color: 'white',
+          background: p2ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
+        }}
+      >
+        P2 Extension
       </CButton>
     </div>
   );

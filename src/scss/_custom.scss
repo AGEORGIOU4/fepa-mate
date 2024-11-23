@@ -57,8 +57,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin: 5px 0;
-  display: flex;
+  margin: 5px 15px;
+  // display: flex;
   align-items: center;
   justify-content: center;
   background-color: #6b7785;
@@ -101,6 +101,7 @@
 .timer-button:hover {
   background-color: #bbb;
 }
+
 
 /* Circle shot clock styling */
 .shot-clock-circle {

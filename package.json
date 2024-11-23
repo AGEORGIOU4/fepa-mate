@@ -16,7 +16,7 @@
     "url": "git@github.com:coreui/coreui-pro-react-admin-template.git"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
+  "author": "FEPA",
   "scripts": {
     "prebuild": "npm install --legacy-peer-deps",
     "build": "vite build",

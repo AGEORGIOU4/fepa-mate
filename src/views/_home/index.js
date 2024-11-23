@@ -14,7 +14,7 @@ import { CShotClock } from "./components/shot-clock";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState(localStorage.getItem("activeTab") || "setup")
-  const [matchRunning, setMatchRunning] = useState(localStorage.getItem("running") || false)
+  const [matchRunning, setMatchRunning] = useState(localStorage.getItem("running") == 'true' || false)
 
   const handleTabChange = (key) => {
     if (activeTab === "match" && key == "setup" && localStorage.getItem("running")) {

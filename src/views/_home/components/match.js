@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { CCol, CButton, CImage, CRow } from "@coreui/react-pro";
-import avatar8 from "./../../../assets/images/avatars/8.jpg";
-import avatar9 from "./../../../assets/images/avatars/9.jpg";
 import CIcon from "@coreui/icons-react";
 import { cilMinus, cilPlus } from "@coreui/icons";
 
@@ -60,8 +58,22 @@ export const CMatch = () => {
   };
 
   const incrementSet1 = () => {
-    if (set1 < form?.numberOfSets) setSet1(set1 + 1);
+    setSet1((prevSet1) => {
+      const newSet1 = prevSet1 + 1;
+
+      if (newSet1 >= form?.numberOfSets) {
+        const userConfirmed = window.confirm("The match is finished. Are you sure you want to exit?");
+        if (userConfirmed) {
+          localStorage.setItem("activeTab", "setup");
+          localStorage.setItem("running", false);
+          window.location.reload()
+        }
+      }
+
+      return newSet1;
+    });
   };
+
   const decrementSet1 = () => {
     if (set1 > 0) setSet1(set1 - 1);
   };
@@ -92,13 +104,14 @@ export const CMatch = () => {
           <CImage
             rounded
             size="lg"
-            src={avatar8}
+            src={'/avatar.jpg'}
             alt={`${form?.player1} Avatar`}
             className="player-avatar"
           />
           <h5 className="player-name">{form?.player1}</h5>
-          <div className="score-button-container">
+          <div style={{ textAlign: 'center', width: '100%' }}>
             <CButton
+              disabled
               className="set-button"
               color="secondary"
               onClick={decrementSet1}
@@ -107,6 +120,7 @@ export const CMatch = () => {
               <CIcon icon={cilMinus} />
             </CButton>
             <CButton
+              disabled
               className="set-button"
               color="secondary"
               onClick={incrementSet1}
@@ -139,13 +153,15 @@ export const CMatch = () => {
           <CImage
             rounded
             size="lg"
-            src={avatar9}
+            src={'/avatar.jpg'}
             alt={`${form?.player2} Avatar`}
             className="player-avatar"
           />
           <h5 className="player-name">{form?.player2}</h5>
-          <div className="score-button-container">
+
+          <div style={{ textAlign: 'center', width: '100%' }}>
             <CButton
+              disabled
               className="set-button"
               color="secondary"
               onClick={decrementSet2}
@@ -154,6 +170,7 @@ export const CMatch = () => {
               <CIcon icon={cilMinus} />
             </CButton>
             <CButton
+              disabled
               className="set-button"
               color="secondary"
               onClick={incrementSet2}
@@ -162,6 +179,7 @@ export const CMatch = () => {
               <CIcon icon={cilPlus} />
             </CButton>
           </div>
+
         </CCol>
 
       </CRow>
