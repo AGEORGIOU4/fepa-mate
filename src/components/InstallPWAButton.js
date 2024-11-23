@@ -6,15 +6,14 @@ const InstallPWAButton = () => {
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault(); // Prevent the mini-infobar from appearing
-      setDeferredPrompt(e); // Save the event
+      e.preventDefault(); // Prevent the default mini-infobar
+      setDeferredPrompt(e); // Save the event for triggering later
       setIsInstallable(true); // Show the install button
     };
 
-    // Listen for the beforeinstallprompt event
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // Cleanup the event listener on unmount
+    // Cleanup on component unmount
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
@@ -23,13 +22,15 @@ const InstallPWAButton = () => {
   const handleInstallClick = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt(); // Show the install prompt
+
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
           console.log('User accepted the install prompt');
         } else {
           console.log('User dismissed the install prompt');
         }
-        setDeferredPrompt(null); // Clear the prompt
+
+        setDeferredPrompt(null); // Clear the prompt after user action
         setIsInstallable(false); // Hide the install button
       });
     }

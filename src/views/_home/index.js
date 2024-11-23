@@ -11,7 +11,7 @@ import {
 import { CSetup } from "./components/setup";
 import { CMatch } from "./components/match";
 import { CShotClock } from "./components/shot-clock";
-import InstallPWAButton from "./components/InstallPWAButton";
+import InstallPWAButton from "../../components/InstallPWAButton";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState(localStorage.getItem("activeTab") || "setup")
@@ -25,6 +25,9 @@ const Home = () => {
     <>
 
       <CImage style={{ position: 'absolute', top: 10, right: 10, width: '80px' }} src="fepa-logo.png" />
+      <div style={{ position: 'absolute', bottom: 10, right: 10 }} >
+        <InstallPWAButton />
+      </div>
       <div className="min-vh-100 gradient-background">
         <CTabs
           activeItemKey={activeTab}
@@ -38,7 +41,7 @@ const Home = () => {
           <CTabContent>
             <CTabPanel className="p-3" itemKey="setup">
               <CSetup />
-              <InstallPWAButton />
+
             </CTabPanel>
             <CTabPanel className="p-3" itemKey="match">
               <CMatch />

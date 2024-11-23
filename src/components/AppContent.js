@@ -4,12 +4,10 @@ import { CContainer, CSpinner } from '@coreui/react-pro'
 
 // routes config
 import routes from '../routes'
-import AppBreadcrumb from './AppBreadcrumb'
 
 const AppContent = () => {
   return (
     <CContainer lg className="px-4">
-      <AppBreadcrumb />
       <Suspense fallback={<CSpinner color="primary" />}>
         <Routes>
           {routes.map((route, idx) => {
