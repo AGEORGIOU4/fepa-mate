@@ -1,0 +1,120 @@
+.cplay-container {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Styling for the player avatars */
+.player-avatar {
+  max-width: 100%;
+  height: auto;
+  /* Ensures proper aspect ratio */
+  border-radius: 50%;
+  margin: 10px auto;
+}
+
+/* Player name styling */
+.player-name {
+  margin: 15px auto;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Score control container */
+.score-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Styling for the score buttons */
+.score-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6b7785;
+  /* Light gray background */
+  border: none;
+  cursor: pointer;
+}
+
+.score-button:hover {
+  background-color: #bbb;
+}
+
+/* Score display styling */
+.score-display {
+  font-size: 5rem;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.set-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6b7785;
+  /* Light gray background */
+  border: none;
+  cursor: pointer;
+}
+
+.set-button:hover {
+  background-color: #bbb;
+}
+
+
+/* Styling for the race-to display */
+.race-to-row {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Gradient background styling */
+.gradient-background {
+  background: linear-gradient(135deg, #004d4d, #00274d);
+  color: white;
+}
+
+/* Styles for small screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .player-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .player-name {
+    font-size: 1rem;
+    /* Adjust font size for smaller screens */
+  }
+
+  /* Adjust score buttons for smaller screens */
+  .score-button-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .score-button {
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+  }
+
+  .score-display {
+    font-size: 5rem;
+  }
+
+  .race-to-row {
+    font-size: 1.2rem;
+    /* Smaller font size for "Race to" on smaller screens */
+  }
+}
