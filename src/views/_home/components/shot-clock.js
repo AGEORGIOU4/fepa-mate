@@ -1,28 +1,38 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CCol, CButton, CRow } from "@coreui/react-pro";
 
+const TimerButton = ({ handleTimeButtonClick, time, selectedTime }) => {
+  return (
+    <CButton
+      className="timer-button"
+      onClick={() => handleTimeButtonClick(time)}
+      style={{
+        margin: "0 10px",
+        backgroundColor: selectedTime === time ? "#555555" : "", selectedTime
+      }}
+    >
+      {time}s
+    </CButton>
+  )
+}
+
 export const CShotClock = () => {
+  const times = [60, 45, 30, 15];
+
   const [defaultTime, setDefaultTime] = useState(60); // Default to 60 seconds
   const [shotClock, setShotClock] = useState(defaultTime); // Default to 60 seconds
   const [timer, setTimer] = useState(null); // Timer reference
   const [isRunning, setIsRunning] = useState(false); // Track if the clock is running
   const [selectedTime, setSelectedTime] = useState(60); // Track the selected time
-  const [hasBeeped, setHasBeeped] = useState(false); // Track if beep has been triggered
 
-  // Track whether players have used their extension
   const [p1ExtensionUsed, setP1ExtensionUsed] = useState(false);
   const [p2ExtensionUsed, setP2ExtensionUsed] = useState(false);
 
-  // Circumference based on radius 80 (for circle with width/height 160)
-  const radius = 90;
+  const radius = 111;
   const circumference = 2 * Math.PI * radius;
 
-  // Load the beep sound (you can replace the URL with your sound file)
-  const beepSoundRef = useRef(new Audio('/beep.mp4')); // Reference to the beep sound
-  const beep15 = new Audio('/15seconds.m4a'); // Make sure to place beep.mp3 in your public folder or use a valid URL
-  const beep5 = new Audio('/5seconds.m4a'); // Make sure to place beep.mp3 in your public folder or use a valid URL
+  const beepSoundRef = useRef(new Audio('/beep.mp4'));
 
-  // Function to determine the stroke color based on time remaining
   const getStrokeColor = (time) => {
     if (time > 45) {
       return "#51cc8a"; // Green for 45s-60s
@@ -35,7 +45,6 @@ export const CShotClock = () => {
     }
   };
 
-  // Play beep sound if within danger zones
   const playBeepIfNeeded = (time) => {
     if (time <= 5) {
       beepSoundRef.current.play(); // Play the beep sound
@@ -43,15 +52,13 @@ export const CShotClock = () => {
   };
 
   const pauseBeep = () => {
-    beepSoundRef.current.pause(); // Stop the beep sound
+    beepSoundRef.current.pause();
   };
   const stopBeep = () => {
-    beepSoundRef.current.pause(); // Stop the beep sound
-    beepSoundRef.current.currentTime = 0; // Reset the beep sound to the beginning
+    beepSoundRef.current.pause();
+    beepSoundRef.current.currentTime = 0;
   };
 
-
-  // Start or pause the shot clock countdown
   const startShotClock = () => {
     const newTimer = setInterval(() => {
       setShotClock((prev) => {
@@ -87,7 +94,6 @@ export const CShotClock = () => {
     setIsRunning(!isRunning); // Toggle the clock state
   };
 
-  // Reset shot clock to the selected time
   const resetShotClock = (time) => {
     stopBeep(); // Stop the beep sound if it's playing
     setShotClock(time);
@@ -97,12 +103,10 @@ export const CShotClock = () => {
     setP2ExtensionUsed(false); // Reset player 2 extension
   };
 
-  // Handle the click on the circle to reset the timer and start countdown
   const handleCircleClick = () => {
     toggleShotClock()
   };
 
-  // Restart the shot clock and start immediately
   const restartShotClock = () => {
     stopBeep(); // Stop the beep sound if it's playing
     setShotClock(selectedTime);
@@ -112,16 +116,14 @@ export const CShotClock = () => {
     setIsRunning(true); // Mark the clock as running
   };
 
-  // Extension for Player 1
   const handleP1Extension = () => {
-    stopBeep(); // Stop the beep sound if it's playing
+    stopBeep();
     if (!p1ExtensionUsed) {
-      setShotClock(prev => prev + 15); // Add 15 seconds to the shot clock
-      setP1ExtensionUsed(true); // Mark player 1 extension as used
+      setShotClock(prev => prev + 15);
+      setP1ExtensionUsed(true);
     }
   };
 
-  // Extension for Player 2
   const handleP2Extension = () => {
     stopBeep(); // Stop the beep sound if it's playing
     if (!p2ExtensionUsed) {
@@ -131,182 +133,157 @@ export const CShotClock = () => {
   };
 
   useEffect(() => {
-    // Cleanup on component unmount
     return () => {
       if (timer) clearInterval(timer);
     };
   }, [timer]);
 
   useEffect(() => {
-    // Cleanup on component unmount
     return () => {
-      pauseBeep(); // Stop beep if playing
+      pauseBeep();
       if (timer) clearInterval(timer);
     };
   }, [timer]);
 
   return (
-    <div className="cplay-container" style={{ position: "relative" }}>
-      <CRow className="justify-content-center text-center race-to-row">
-        <CCol sm={12}>
+    <>
+      <CRow className=" text-center bold-text">
+        <CCol sm={3}>
+          <CButton
+            onClick={handleP1Extension}
+            disabled={p1ExtensionUsed} // Disable after use
+            style={{
+              margin: "20px",
+              width: "100px",
+              height: "60px",
+              color: 'white',
+              background: p1ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
+            }}
+          >
+            P1 Extension
+          </CButton>
+
+        </CCol>
+        <CCol sm={6}>
           <svg
-            width="200" // Increased width
-            height="200" // Increased height
-            onClick={handleCircleClick} // Reset the timer to selectedTime and start countdown
+            width="250" // Updated size
+            height="250"
+            onClick={handleCircleClick}
             style={{
               cursor: "pointer",
-              marginTop: "20px",
-              transition: "transform 0.2s ease", // Optional animation for interaction
-              transform: isRunning ? "scale(0.95)" : "scale(1)", // Shrink on running
+              margin: "0 20px",
+              transition: "transform 0.2s ease",
+              transform: isRunning ? "scale(0.95)" : "scale(1)",
             }}
           >
             <circle
-              cx="100" // Center of the circle (adjusted for larger size)
-              cy="100" // Center of the circle (adjusted for larger size)
-              r="90" // Increased radius for a larger circle
+              cx="125" // Center adjusted to match larger SVG
+              cy="125"
+              r="110" // Increased radius for a larger circle
               stroke="lightgray"
-              strokeWidth="10"
+              strokeWidth="12" // Adjusted stroke width for better proportions
               fill="none"
             />
             <circle
-              cx="100" // Center of the circle (adjusted for larger size)
-              cy="100" // Center of the circle (adjusted for larger size)
-              r="90" // Increased radius for a larger circle
-              stroke={getStrokeColor(shotClock)} // Dynamic color based on time
-              strokeWidth="10"
-              fill="none"
-              strokeDasharray={circumference}
-              strokeDashoffset={(shotClock / 60) * circumference}
-              transform="rotate(-90 100 100)" // Rotate the circle for proper visual start (adjusted center)
+              cx="125"
+              cy="125"
+              r="110"
+              stroke={getStrokeColor(shotClock)}
+              strokeWidth="12"
+              fill="dark"
+              strokeDasharray={circumference} // Update if circumference depends on radius
+              strokeDashoffset={((60 - shotClock) / 60) * circumference}
+              transform="rotate(-90 125 125)" // Rotation pivot matches the new center
             />
-            <text x="50%" y="50%" textAnchor="middle" dy=".3em" fontSize="30" fill="white">
+            <text
+              x="50%"
+              y="50%"
+              textAnchor="middle"
+              dy=".3em"
+              fontSize="35" // Adjusted font size to fit the new circle size
+              fill="white"
+            >
               {shotClock}
             </text>
           </svg>
+
+
+        </CCol>
+
+        <CCol sm={3}>
+          <CButton
+            onClick={handleP2Extension}
+            disabled={p2ExtensionUsed} // Disable after use
+            style={{
+              margin: "20px",
+              width: "100px",
+              height: "60px",
+              color: 'white',
+              background: p2ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
+            }}
+          >
+            P2 Extension
+          </CButton>
         </CCol>
       </CRow>
-      <CRow className="justify-content-center p-3">
-        <CButton
-          className="timer-button"
-          onClick={() => handleTimeButtonClick(60)}
-          style={{
-            margin: "0 10px",
-            backgroundColor: selectedTime === 60 ? "#555555" : "", // Darker gray for selected button
-          }}
-        >
-          60s
-        </CButton>
-        <CButton
-          className="timer-button"
-          onClick={() => handleTimeButtonClick(45)}
-          style={{
-            margin: "0 10px",
-            backgroundColor: selectedTime === 45 ? "#555555" : "", // Darker gray for selected button
-          }}
-        >
-          45s
-        </CButton>
-        <CButton
-          className="timer-button"
-          onClick={() => handleTimeButtonClick(30)}
-          style={{
-            margin: "0 10px",
-            backgroundColor: selectedTime === 30 ? "#555555" : "", // Darker gray for selected button
-          }}
-        >
-          30s
-        </CButton>
-        <CButton
-          className="timer-button"
-          onClick={() => handleTimeButtonClick(15)}
-          style={{
-            margin: "0 10px",
-            backgroundColor: selectedTime === 15 ? "#555555" : "", // Darker gray for selected button
-          }}
-        >
-          15s
-        </CButton>
+
+      <CRow className="justify-content-center" style={{ padding: "10px" }}>
+        {times?.map((time, index) => {
+          return (
+            <TimerButton key={time} handleTimeButtonClick={handleTimeButtonClick} time={time} selectedTime={selectedTime} />
+          )
+        })}
       </CRow>
 
-      <CButton
-        className="timer-button"
-        onClick={() => resetShotClock(selectedTime)} // Reset the timer to the selected time
-        style={{
-          position: "absolute",
-          left: 10,
-          bottom: 10,
-          width: "80px",
-          height: "80px",
-          background: "#ef376e",
-        }}
-      >
-        Reset
-      </CButton>
+      <CRow>
+        <CButton
+          className="timer-button"
+          onClick={() => resetShotClock(selectedTime)}
+          style={{
+            position: "absolute",
+            left: 20,
+            bottom: 20,
+            width: "80px",
+            height: "80px",
+            background: "#ef376e",
+          }}
+        >
+          Reset
+        </CButton>
 
-      <CButton
-        className="timer-button"
-        onClick={toggleShotClock} // Toggle start/pause
-        style={{
-          position: "absolute",
-          right: 100,
-          bottom: 10,
-          width: "80px",
-          height: "80px",
-          background: isRunning ? "#ffc107" : "#51cc8a", // Change button color when running
-        }}
-      >
-        {isRunning ? "Pause" : "Start"}
-      </CButton>
+        <CButton
+          className="timer-button"
+          onClick={toggleShotClock} // Toggle start/pause
+          style={{
+            position: "absolute",
+            right: 120,
+            bottom: 20,
+            width: "80px",
+            height: "80px",
+            background: isRunning ? "#ffc107" : "#51cc8a", // Change button color when running
+          }}
+        >
+          {isRunning ? "Pause" : "Start"}
+        </CButton>
 
-      {/* Restart button */}
-      <CButton
-        className="timer-button"
-        disabled={!isRunning ? true : false}
-        onClick={restartShotClock} // Reset and start immediately
-        style={{
-          position: "absolute",
-          right: 10,
-          bottom: 10,
-          width: "80px",
-          height: "80px",
-          background: "#007bff", // Blue color for the restart button
-        }}
-      >
-        Restart
-      </CButton>
+        <CButton
+          className="timer-button"
+          disabled={!isRunning ? true : false}
+          onClick={restartShotClock}
+          style={{
+            position: "absolute",
+            right: 20,
+            bottom: 20,
+            width: "80px",
+            height: "80px",
+            background: "#007bff",
+          }}
+        >
+          Restart
+        </CButton>
 
-      {/* Extension buttons */}
-      <CButton
-        onClick={handleP1Extension}
-        disabled={p1ExtensionUsed} // Disable after use
-        style={{
-          position: "absolute",
-          left: 100,
-          top: 10,
-          width: "100px",
-          height: "60px",
-          color: 'white',
-          background: p1ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
-        }}
-      >
-        P1 Extension
-      </CButton>
+      </CRow>
+    </>
 
-      <CButton
-        onClick={handleP2Extension}
-        disabled={p2ExtensionUsed} // Disable after use
-        style={{
-          position: "absolute",
-          right: 100,
-          top: 10,
-          width: "100px",
-          height: "60px",
-          color: 'white',
-          background: p2ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
-        }}
-      >
-        P2 Extension
-      </CButton>
-    </div>
   );
 };
