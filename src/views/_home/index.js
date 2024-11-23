@@ -13,6 +13,7 @@ import { CMatch } from "./components/match";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState(localStorage.getItem("activeTab") || "setup")
+  const [matchRunning, setMatchRunning] = useState(localStorage.getItem("running") || false)
 
   const handleTabChange = (key) => {
     if (activeTab === "match" && key == "setup" && localStorage.getItem("running")) {
@@ -23,6 +24,7 @@ const Home = () => {
       } else {
         localStorage.setItem("form", "")
         localStorage.setItem("running", false)
+        setMatchRunning(false)
       }
     }
   };
@@ -38,7 +40,7 @@ const Home = () => {
           >
             <CTabList variant="tabs">
               <CTab itemKey="setup">Set Up</CTab>
-              <CTab itemKey="match">Match</CTab>
+              <CTab itemKey="match" disabled={!matchRunning}>Match</CTab>
               <CTab itemKey="shot-clock">Shot Clock</CTab>
             </CTabList>
             <CTabContent>
