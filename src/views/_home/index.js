@@ -10,6 +10,7 @@ import {
 } from "@coreui/react-pro";
 import { CSetup } from "./components/setup";
 import { CMatch } from "./components/match";
+import { CShotClock } from "./components/shot-clock";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState(localStorage.getItem("activeTab") || "setup")
@@ -26,6 +27,8 @@ const Home = () => {
         localStorage.setItem("running", false)
         setMatchRunning(false)
       }
+    } else {
+      localStorage.setItem("activeTab", key)
     }
   };
 
@@ -51,7 +54,7 @@ const Home = () => {
                 <CMatch />
               </CTabPanel>
               <CTabPanel className="p-3" itemKey="shot-clock">
-                Contact tab content
+                <CShotClock />
               </CTabPanel>
             </CTabContent>
           </CTabs>
