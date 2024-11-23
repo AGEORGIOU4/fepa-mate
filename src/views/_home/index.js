@@ -8,8 +8,6 @@ import {
   CTabPanel,
   CTabs,
 } from "@coreui/react-pro";
-import { CastProvider } from "react-cast-sender";
-import { CastButton } from "react-cast-sender";
 import { CSetup } from "./components/setup";
 import { CMatch } from "./components/match";
 
@@ -30,7 +28,7 @@ const Home = () => {
   };
 
   return (
-    <CastProvider receiverApplicationId="CC1AD845">
+    <>
       <CImage style={{ position: 'absolute', top: 10, right: 10, width: '80px' }} src="fepa-logo.png" />
       <div className="bg-body-tertiary min-vh-100 d-flex flex-row gradient-background">
         <div style={{ padding: "0px 10px", width: '100%' }}>
@@ -57,11 +55,9 @@ const Home = () => {
           </CTabs>
         </div>
         <div style={{ width: "20px", position: 'absolute', bottom: 0, right: 10 }}>
-          <CastButton />
         </div>
       </div>
-
-    </CastProvider>
+    </>
   );
 };
 
