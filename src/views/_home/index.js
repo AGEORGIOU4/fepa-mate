@@ -50,7 +50,7 @@ const Home = () => {
             <CTab itemKey="shot-clock">Shot Clock</CTab>
             <CTab itemKey="setup">Set Up</CTab>
             <CTab itemKey="match" disabled={!matchRunning}>Match</CTab>
-            <CTab itemKey="streaming" >Streaming</CTab>
+            {/* <CTab itemKey="streaming" >Streaming</CTab> */}
           </CTabList>
           <CTabContent>
             <CTabPanel className="p-3" itemKey="setup">
@@ -65,9 +65,7 @@ const Home = () => {
             <CTabPanel className="p-3" itemKey="shot-clock">
               {isLandscape ? <CShotClockLandscape /> : <CShotClock />}
             </CTabPanel>
-            <CTabPanel className="p-3" itemKey="streaming">
-              streaming
-            </CTabPanel>
+
           </CTabContent>
         </CTabs>
         <div style={{ width: "20px", position: 'absolute', bottom: 0, right: 10 }}>
