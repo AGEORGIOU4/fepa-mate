@@ -113,7 +113,7 @@ export const CShotClock = () => {
   const [p1ExtensionUsed, setP1ExtensionUsed] = useState(false);
   const [p2ExtensionUsed, setP2ExtensionUsed] = useState(false);
 
-  const radius = 140;
+  const radius = 110;
   const circumference = 2 * Math.PI * radius;
 
   const beepSoundRef = useRef(new Audio('/beep.mp4'));
@@ -232,59 +232,52 @@ export const CShotClock = () => {
 
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "65vh", // Full viewport height
-
-        }}
-      >
+      <div>
         <CRow className="text-center bold-text">
           <ExtensionButtons handleP1Extension={handleP1Extension} handleP2Extension={handleP2Extension} p1ExtensionUsed={p1ExtensionUsed} p2ExtensionUsed={p2ExtensionUsed} />
           <CCol sm={6} >
             <svg
-              width="300"
-              height="300"
+              width="250"
+              height="250"
               onClick={handleCircleClick}
               style={{
                 cursor: "pointer",
-                margin: "20px 20px",
+                margin: "0 20px",
                 transition: "transform 0.2s ease",
                 transform: isRunning ? "scale(0.95)" : "scale(1)",
               }}
             >
               <circle
-                cx="150" // Center adjusted for new size
-                cy="150"
-                r="140" // Adjusted radius for new dimensions
+                cx="125" // Center adjusted for new size
+                cy="125"
+                r="110" // Adjusted radius for new dimensions
                 stroke="lightgray"
                 strokeWidth="12" // Stroke width adjusted for better proportions
                 fill="none"
               />
               <circle
-                cx="150"
-                cy="150"
-                r="140"
+                cx="125"
+                cy="125"
+                r="110"
                 stroke={getStrokeColor(shotClock)}
                 strokeWidth="12"
                 fill="dark"
                 strokeDasharray={circumference} // Update if circumference depends on radius
                 strokeDashoffset={((60 - shotClock) / 60) * circumference}
-                transform="rotate(-90 150 150)" // Rotation pivot updated for new center
+                transform="rotate(-90 125 125)" // Rotation pivot updated for new center
               />
               <text
                 x="50%"
                 y="50%"
                 textAnchor="middle"
                 dy=".3em"
-                fontSize="40" // Adjusted font size to fit the new circle size
+                fontSize="35" // Adjusted font size to fit the new circle size
                 fill="white"
               >
                 {shotClock}
               </text>
             </svg>
+
 
           </CCol>
         </CRow>
