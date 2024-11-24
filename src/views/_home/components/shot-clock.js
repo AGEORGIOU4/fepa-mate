@@ -15,6 +15,7 @@ const TimerButton = ({ handleTimeButtonClick, time, selectedTime }) => {
     </CButton>
   )
 }
+
 const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, selectedTime, isRunning }) => {
   return (
     <CRow style={{ position: "absolute", bottom: 20, width: "100%", textAlign: 'center' }}>
@@ -67,7 +68,7 @@ const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, sele
 const ExtensionButtons = ({ handleP1Extension, handleP2Extension, p1ExtensionUsed, p2ExtensionUsed }) => {
   return (
     <>
-      <CCol xs={6} sm={3}>
+      <div style={{ width: "100%", textAlign: 'center' }}>
         <CButton
           onClick={handleP1Extension}
           disabled={p1ExtensionUsed} // Disable after use
@@ -81,9 +82,7 @@ const ExtensionButtons = ({ handleP1Extension, handleP2Extension, p1ExtensionUse
         >
           P1 Extension
         </CButton>
-      </CCol>
 
-      <CCol xs={6} sm={3}>
         <CButton
           onClick={handleP2Extension}
           disabled={p2ExtensionUsed} // Disable after use
@@ -97,7 +96,8 @@ const ExtensionButtons = ({ handleP1Extension, handleP2Extension, p1ExtensionUse
         >
           P2 Extension
         </CButton>
-      </CCol></>
+      </div>
+    </>
   )
 }
 
@@ -139,6 +139,7 @@ export const CShotClock = () => {
   const pauseBeep = () => {
     beepSoundRef.current.pause();
   };
+
   const stopBeep = () => {
     beepSoundRef.current.pause();
     beepSoundRef.current.currentTime = 0;
@@ -232,56 +233,59 @@ export const CShotClock = () => {
 
   return (
     <>
-      <div>
-        <CRow className="text-center bold-text">
-          <ExtensionButtons handleP1Extension={handleP1Extension} handleP2Extension={handleP2Extension} p1ExtensionUsed={p1ExtensionUsed} p2ExtensionUsed={p2ExtensionUsed} />
-          <CCol sm={6} >
-            <svg
-              width="250"
-              height="250"
-              onClick={handleCircleClick}
-              style={{
-                cursor: "pointer",
-                margin: "0 20px",
-                transition: "transform 0.2s ease",
-                transform: isRunning ? "scale(0.95)" : "scale(1)",
-              }}
-            >
-              <circle
-                cx="125" // Center adjusted for new size
-                cy="125"
-                r="110" // Adjusted radius for new dimensions
-                stroke="lightgray"
-                strokeWidth="12" // Stroke width adjusted for better proportions
-                fill="none"
-              />
-              <circle
-                cx="125"
-                cy="125"
-                r="110"
-                stroke={getStrokeColor(shotClock)}
-                strokeWidth="12"
-                fill="dark"
-                strokeDasharray={circumference} // Update if circumference depends on radius
-                strokeDashoffset={((60 - shotClock) / 60) * circumference}
-                transform="rotate(-90 125 125)" // Rotation pivot updated for new center
-              />
-              <text
-                x="50%"
-                y="50%"
-                textAnchor="middle"
-                dy=".3em"
-                fontSize="35" // Adjusted font size to fit the new circle size
-                fill="white"
-              >
-                {shotClock}
-              </text>
-            </svg>
+      <ExtensionButtons handleP1Extension={handleP1Extension} handleP2Extension={handleP2Extension} p1ExtensionUsed={p1ExtensionUsed} p2ExtensionUsed={p2ExtensionUsed} />
+      <div className="text-center bold-text"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "45vh", // Full viewport height
 
-
-          </CCol>
-        </CRow>
+        }}>
+        <svg
+          width="250"
+          height="250"
+          onClick={handleCircleClick}
+          style={{
+            cursor: "pointer",
+            margin: "0 20px",
+            transition: "transform 0.2s ease",
+            transform: isRunning ? "scale(0.95)" : "scale(1)",
+          }}
+        >
+          <circle
+            cx="125" // Center adjusted for new size
+            cy="125"
+            r="110" // Adjusted radius for new dimensions
+            stroke="lightgray"
+            strokeWidth="12" // Stroke width adjusted for better proportions
+            fill="none"
+          />
+          <circle
+            cx="125"
+            cy="125"
+            r="110"
+            stroke={getStrokeColor(shotClock)}
+            strokeWidth="12"
+            fill="dark"
+            strokeDasharray={circumference} // Update if circumference depends on radius
+            strokeDashoffset={((60 - shotClock) / 60) * circumference}
+            transform="rotate(-90 125 125)" // Rotation pivot updated for new center
+          />
+          <text
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            dy=".3em"
+            fontSize="35" // Adjusted font size to fit the new circle size
+            fill="white"
+          >
+            {shotClock}
+          </text>
+        </svg>
       </div>
+
+
       <CRow className="justify-content-center" style={{ padding: "10px" }}>
         {times?.map((time, index) => {
           return (
