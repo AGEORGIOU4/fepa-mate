@@ -1,6 +1,26 @@
+import { cilCloudDownload } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
+import { CButton } from '@coreui/react-pro';
 import React, { useState, useEffect } from 'react';
 
+const isIos = () => {
+  return (
+    /iPhone|iPad|iPod/.test(navigator.userAgent) &&
+    navigator.userAgent.includes('Safari')
+  );
+};
+
+const isInStandaloneMode = () => ('standalone' in window.navigator) && window.navigator.standalone;
+
+
 const InstallPWAButton = () => {
+  const [showInstructions, setShowInstructions] = useState(false);
+
+  useEffect(() => {
+    if (isIos() && !isInStandaloneMode()) {
+      setShowInstructions(true);
+    }
+  }, []);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
@@ -39,10 +59,26 @@ const InstallPWAButton = () => {
   return (
     <>
       {isInstallable && (
-        <button onClick={handleInstallClick} style={{ padding: '10px', fontSize: '16px' }}>
-          Install App
-        </button>
+        <CButton variant='ghost' onClick={handleInstallClick} style={{ padding: '10px', fontSize: '16px', color: 'white' }}>
+          <CIcon icon={cilCloudDownload} /> Install App
+        </CButton>
       )}
+
+      {/* {!showInstructions && (
+        <div style={{
+          padding: '20px',
+          border: '1px solid #ccc',
+          textAlign: 'center'
+        }}>
+          <p>
+            To install this app:
+          </p>
+          <ol>
+            <li>Tap the <strong>Share</strong> button (the square with an arrow).</li>
+            <li>Scroll down and select <strong>Add to Home Screen</strong>.</li>
+          </ol>
+        </div>
+      )} */}
     </>
   );
 };

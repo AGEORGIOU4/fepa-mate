@@ -15,93 +15,62 @@ const TimerButton = ({ handleTimeButtonClick, time, selectedTime }) => {
     </CButton>
   )
 }
+
 const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, selectedTime, isRunning }) => {
   return (
-    <CRow style={{ position: "absolute", bottom: 20, width: "100%", textAlign: 'center' }}>
-      <CCol xs={4}>
-        <CButton
-          className="timer-button"
-          onClick={() => resetShotClock(selectedTime)}
-          style={{
-            width: "80px",
-            height: "80px",
-            background: "#ef376e",
-          }}
-        >
-          Reset
-        </CButton>
-      </CCol>
+    <CRow>
+      <CButton
+        className="timer-button"
+        onClick={() => resetShotClock(selectedTime)}
+        style={{
+          position: "absolute",
+          left: 20,
+          bottom: 20,
+          width: "80px",
+          height: "80px",
+          background: "#ef376e",
+        }}
+      >
+        Reset
+      </CButton>
 
-      <CCol xs={4}>
-        <CButton
-          className="timer-button"
-          onClick={toggleShotClock}
-          style={{
-            width: "80px",
-            height: "80px",
-            background: isRunning ? "#ffc107" : "#51cc8a",
-          }}
-        >
-          {isRunning ? "Pause" : "Start"}
-        </CButton>
-      </CCol>
+      <CButton
+        className="timer-button"
+        onClick={toggleShotClock} // Toggle start/pause
+        style={{
+          position: "absolute",
+          right: 120,
+          bottom: 20,
+          width: "80px",
+          height: "80px",
+          background: isRunning ? "#ffc107" : "#51cc8a", // Change button color when running
+        }}
+      >
+        {isRunning ? "Pause" : "Start"}
+      </CButton>
 
-      <CCol xs={4}>
-        <CButton
-          className="timer-button"
-          disabled={!isRunning}
-          onClick={restartShotClock}
-          style={{
-            width: "80px",
-            height: "80px",
-            background: "#007bff",
-          }}
-        >
-          Restart
-        </CButton>
-      </CCol>
+      <CButton
+        className="timer-button"
+        disabled={!isRunning ? true : false}
+        onClick={restartShotClock}
+        style={{
+          position: "absolute",
+          right: 20,
+          bottom: 20,
+          width: "80px",
+          height: "80px",
+          background: "#007bff",
+        }}
+      >
+        Restart
+      </CButton>
+
     </CRow>
+
   );
 };
 
-const ExtensionButtons = ({ handleP1Extension, handleP2Extension, p1ExtensionUsed, p2ExtensionUsed }) => {
-  return (
-    <>
-      <CCol xs={6} sm={3}>
-        <CButton
-          onClick={handleP1Extension}
-          disabled={p1ExtensionUsed} // Disable after use
-          style={{
-            margin: "20px",
-            width: "100px",
-            height: "60px",
-            color: "white",
-            background: p1ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
-          }}
-        >
-          P1 Extension
-        </CButton>
-      </CCol>
-
-      <CCol xs={6} sm={3}>
-        <CButton
-          onClick={handleP2Extension}
-          disabled={p2ExtensionUsed} // Disable after use
-          style={{
-            margin: "20px",
-            width: "100px",
-            height: "60px",
-            color: "white",
-            background: p2ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
-          }}
-        >
-          P2 Extension
-        </CButton>
-      </CCol></>
-  )
-}
-
-export const CShotClock = () => {
+export const CShotClockLandscape = () => {
   const times = [60, 45, 30, 15];
 
   const [defaultTime, setDefaultTime] = useState(60); // Default to 60 seconds
@@ -113,7 +82,7 @@ export const CShotClock = () => {
   const [p1ExtensionUsed, setP1ExtensionUsed] = useState(false);
   const [p2ExtensionUsed, setP2ExtensionUsed] = useState(false);
 
-  const radius = 140;
+  const radius = 95;
   const circumference = 2 * Math.PI * radius;
 
   const beepSoundRef = useRef(new Audio('/beep.mp4'));
@@ -139,6 +108,7 @@ export const CShotClock = () => {
   const pauseBeep = () => {
     beepSoundRef.current.pause();
   };
+
   const stopBeep = () => {
     beepSoundRef.current.pause();
     beepSoundRef.current.currentTime = 0;
@@ -232,75 +202,96 @@ export const CShotClock = () => {
 
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "65vh", // Full viewport height
 
-        }}
-      >
-        <CRow className="text-center bold-text">
-          <ExtensionButtons handleP1Extension={handleP1Extension} handleP2Extension={handleP2Extension} p1ExtensionUsed={p1ExtensionUsed} p2ExtensionUsed={p2ExtensionUsed} />
-          <CCol sm={6} >
+      <div>
+        <CRow className=" text-center bold-text">
+          <CCol sm={4}>
+            <CButton
+              onClick={handleP1Extension}
+              disabled={p1ExtensionUsed} // Disable after use
+              style={{
+                margin: "20px",
+                width: "100px",
+                height: "60px",
+                color: 'white',
+                background: p1ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
+              }}
+            >
+              P1 Extension
+            </CButton>
+
+          </CCol>
+          <CCol sm={4}>
             <svg
-              width="300"
-              height="300"
+              width="220" // Updated size
+              height="220"
               onClick={handleCircleClick}
               style={{
                 cursor: "pointer",
-                margin: "20px 20px",
+                margin: "0 20px",
                 transition: "transform 0.2s ease",
                 transform: isRunning ? "scale(0.95)" : "scale(1)",
               }}
             >
               <circle
-                cx="150" // Center adjusted for new size
-                cy="150"
-                r="140" // Adjusted radius for new dimensions
+                cx="110" // Center adjusted to match new size
+                cy="110"
+                r="95" // Adjusted radius for new dimensions
                 stroke="lightgray"
                 strokeWidth="12" // Stroke width adjusted for better proportions
                 fill="none"
               />
               <circle
-                cx="150"
-                cy="150"
-                r="140"
+                cx="110"
+                cy="110"
+                r="95"
                 stroke={getStrokeColor(shotClock)}
                 strokeWidth="12"
                 fill="dark"
                 strokeDasharray={circumference} // Update if circumference depends on radius
                 strokeDashoffset={((60 - shotClock) / 60) * circumference}
-                transform="rotate(-90 150 150)" // Rotation pivot updated for new center
+                transform="rotate(-90 110 110)" // Rotation pivot updated for new center
               />
               <text
                 x="50%"
                 y="50%"
                 textAnchor="middle"
                 dy=".3em"
-                fontSize="40" // Adjusted font size to fit the new circle size
+                fontSize="30" // Adjusted font size to fit the smaller circle
                 fill="white"
               >
                 {shotClock}
               </text>
             </svg>
+          </CCol>
 
+          <CCol sm={4}>
+            <CButton
+              onClick={handleP2Extension}
+              disabled={p2ExtensionUsed} // Disable after use
+              style={{
+                margin: "20px",
+                width: "100px",
+                height: "60px",
+                color: 'white',
+                background: p2ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
+              }}
+            >
+              P2 Extension
+            </CButton>
           </CCol>
         </CRow>
+
+        <CRow className="justify-content-center" style={{ padding: "10px" }}>
+          {times?.map((time, index) => {
+            return (
+              <TimerButton key={time} handleTimeButtonClick={handleTimeButtonClick} time={time} selectedTime={selectedTime} />
+            )
+          })}
+        </CRow>
+
       </div>
-      <CRow className="justify-content-center" style={{ padding: "10px" }}>
-        {times?.map((time, index) => {
-          return (
-            <TimerButton
-              key={time}
-              handleTimeButtonClick={handleTimeButtonClick}
-              time={time}
-              selectedTime={selectedTime}
-            />
-          );
-        })}
-      </CRow>
+
 
 
 
