@@ -40,7 +40,7 @@ const Home = () => {
   return (
     <>
 
-      <CImage style={{ position: 'absolute', top: 10, right: 10, width: '80px' }} src="fepa-logo.png" />
+      {/* <CImage style={{ position: 'absolute', top: 10, right: 10, width: '80px' }} src="fepa-logo.png" /> */}
       <div className="min-vh-100 gradient-background">
         <CTabs
           activeItemKey={activeTab}
@@ -50,6 +50,7 @@ const Home = () => {
             <CTab itemKey="shot-clock">Shot Clock</CTab>
             <CTab itemKey="setup">Set Up</CTab>
             <CTab itemKey="match" disabled={!matchRunning}>Match</CTab>
+            <CTab itemKey="streaming" >Streaming</CTab>
           </CTabList>
           <CTabContent>
             <CTabPanel className="p-3" itemKey="setup">
@@ -62,8 +63,10 @@ const Home = () => {
               <CMatch />
             </CTabPanel>
             <CTabPanel className="p-3" itemKey="shot-clock">
-
               {isLandscape ? <CShotClockLandscape /> : <CShotClock />}
+            </CTabPanel>
+            <CTabPanel className="p-3" itemKey="streaming">
+              streaming
             </CTabPanel>
           </CTabContent>
         </CTabs>
