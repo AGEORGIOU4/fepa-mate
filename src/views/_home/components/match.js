@@ -103,8 +103,9 @@ export const CMatch = () => {
           Race to {form?.raceTo}
         </CCol>
       </CRow>
+      <br />
+      <br />
       <CRow className="justify-content-center text-center">
-
         <Avatar player={form?.player1} />
 
         <CCol xs={6} sm={2} className="text-center">

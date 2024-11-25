@@ -52,17 +52,25 @@ const Home = () => {
             <CTab itemKey="match" disabled={!matchRunning}>Match</CTab>
             {/* <CTab itemKey="streaming" >Streaming</CTab> */}
           </CTabList>
-          <CTabContent>
-            <CTabPanel className="p-3" itemKey="setup">
+          <CTabContent
+            style={{
+              display: "flex",
+              flexDirection: "column", // Ensures vertical layout
+
+              justifyContent: "center", // Centers items horizontally (if applicable)
+              height: "80vh", // Ensures the container takes up the full viewport height
+            }}
+          >
+            <CTabPanel itemKey="setup">
               <div style={{ position: 'absolute', bottom: 10 }} >
                 <InstallPWAButton />
               </div>
               <CSetup />
             </CTabPanel>
-            <CTabPanel className="p-3" itemKey="match">
+            <CTabPanel itemKey="match">
               <CMatch />
             </CTabPanel>
-            <CTabPanel className="p-3" itemKey="shot-clock">
+            <CTabPanel itemKey="shot-clock">
               {isLandscape ? <CShotClockLandscape /> : <CShotClock />}
             </CTabPanel>
 
