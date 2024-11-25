@@ -18,7 +18,7 @@ const TimerButton = ({ handleTimeButtonClick, time, selectedTime }) => {
 
 const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, selectedTime, isRunning }) => {
   return (
-    <CRow style={{ position: "absolute", bottom: 20, width: "100%", textAlign: 'center' }}>
+    <CRow className="justify-content-center text-center" style={{ position: "absolute", bottom: 20, textAlign: 'center', width: "-webkit-fill-available" }}>
       <CCol xs={4}>
         <CButton
           className="timer-button"

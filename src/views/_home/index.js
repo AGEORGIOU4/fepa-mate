@@ -76,8 +76,6 @@ const Home = () => {
 
           </CTabContent>
         </CTabs>
-        <div style={{ width: "20px", position: 'absolute', bottom: 0, right: 10 }}>
-        </div>
       </div>
     </>
   );
