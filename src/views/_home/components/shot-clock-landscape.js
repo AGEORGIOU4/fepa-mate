@@ -7,8 +7,11 @@ const TimerButton = ({ handleTimeButtonClick, time, selectedTime }) => {
       className="timer-button"
       onClick={() => handleTimeButtonClick(time)}
       style={{
+        width: "50px",
+        height: "50px",
         margin: "0 10px",
-        backgroundColor: selectedTime === time ? "#555555" : "", selectedTime
+        backgroundColor: selectedTime === time ? "#777777" : "", selectedTime,
+        scale: selectedTime === time ? "1.15" : "1"
       }}
     >
       {time}s
@@ -18,54 +21,57 @@ const TimerButton = ({ handleTimeButtonClick, time, selectedTime }) => {
 
 const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, selectedTime, isRunning }) => {
   return (
-    <CRow>
+    <>
       <CButton
-        className="timer-button"
         onClick={() => resetShotClock(selectedTime)}
         style={{
           position: "absolute",
           left: 20,
           bottom: 20,
-          width: "80px",
-          height: "80px",
+          color: "white",
+          width: "100px", // Make the button take up the full column width
+          height: "100px",
           background: "#ef376e",
+          borderRadius: "100%"
         }}
       >
         Reset
       </CButton>
 
       <CButton
-        className="timer-button"
         onClick={toggleShotClock} // Toggle start/pause
         style={{
           position: "absolute",
-          right: 120,
+          right: 140,
           bottom: 20,
-          width: "80px",
-          height: "80px",
-          background: isRunning ? "#ffc107" : "#51cc8a", // Change button color when running
+          color: "white",
+          width: "100px", // Make the button take up the full column width
+          height: "100px",
+          background: isRunning ? "#ffc107" : "#51cc8a",
+          borderRadius: "100%"
         }}
       >
         {isRunning ? "Pause" : "Start"}
       </CButton>
 
       <CButton
-        className="timer-button"
         disabled={!isRunning ? true : false}
         onClick={restartShotClock}
         style={{
           position: "absolute",
           right: 20,
           bottom: 20,
-          width: "80px",
-          height: "80px",
+          color: "white",
+          width: "100px", // Make the button take up the full column width
+          height: "100px",
           background: "#007bff",
+          borderRadius: "100%"
         }}
       >
         Restart
       </CButton>
 
-    </CRow>
+    </>
 
   );
 };
@@ -73,16 +79,16 @@ const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, sele
 export const CShotClockLandscape = () => {
   const times = [60, 45, 30, 15];
 
-  const [defaultTime, setDefaultTime] = useState(60); // Default to 60 seconds
+  const [defaultTime, setDefaultTime] = useState(45); // Default to 60 seconds
   const [shotClock, setShotClock] = useState(defaultTime); // Default to 60 seconds
   const [timer, setTimer] = useState(null); // Timer reference
   const [isRunning, setIsRunning] = useState(false); // Track if the clock is running
-  const [selectedTime, setSelectedTime] = useState(60); // Track the selected time
+  const [selectedTime, setSelectedTime] = useState(45); // Track the selected time
 
   const [p1ExtensionUsed, setP1ExtensionUsed] = useState(false);
   const [p2ExtensionUsed, setP2ExtensionUsed] = useState(false);
 
-  const radius = 95;
+  const radius = 126;
   const circumference = 2 * Math.PI * radius;
 
   const beepSoundRef = useRef(new Audio('/beep.mp4'));
@@ -203,28 +209,27 @@ export const CShotClockLandscape = () => {
   return (
     <>
 
-      <div>
-        <CRow className=" text-center bold-text">
-          <CCol sm={4}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "90vh" }}>
+        <CRow className="text-center bold-text">
+          <CCol sm={3} style={{ textAlign: "left" }}>
             <CButton
               onClick={handleP1Extension}
               disabled={p1ExtensionUsed} // Disable after use
               style={{
-                margin: "20px",
+                margin: "30px 50px",
                 width: "100px",
                 height: "60px",
-                color: 'white',
+                color: "white",
                 background: p1ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
               }}
             >
               P1 Extension
             </CButton>
-
           </CCol>
-          <CCol sm={4}>
+          <CCol sm={6} style={{ margin: "10px auto" }}>
             <svg
-              width="220" // Updated size
-              height="220"
+              width="280"
+              height="280"
               onClick={handleCircleClick}
               style={{
                 cursor: "pointer",
@@ -234,66 +239,63 @@ export const CShotClockLandscape = () => {
               }}
             >
               <circle
-                cx="110" // Center adjusted to match new size
-                cy="110"
-                r="95" // Adjusted radius for new dimensions
+                cx="140" // Adjusted for new size (half of 280)
+                cy="140" // Adjusted for new size (half of 280)
+                r="126" // Adjusted radius (135 was too large for the new size)
                 stroke="lightgray"
-                strokeWidth="12" // Stroke width adjusted for better proportions
+                strokeWidth="12" // Adjusted stroke width for better proportions
                 fill="none"
               />
               <circle
-                cx="110"
-                cy="110"
-                r="95"
+                cx="140" // Adjusted for new size
+                cy="140" // Adjusted for new size
+                r="126" // Adjusted radius
                 stroke={getStrokeColor(shotClock)}
-                strokeWidth="12"
+                strokeWidth="12" // Adjusted stroke width
                 fill="dark"
-                strokeDasharray={circumference} // Update if circumference depends on radius
+                strokeDasharray={circumference} // Ensure this is updated if circumference depends on radius
                 strokeDashoffset={((60 - shotClock) / 60) * circumference}
-                transform="rotate(-90 110 110)" // Rotation pivot updated for new center
+                transform="rotate(-90 140 140)" // Adjusted rotation pivot for new center
               />
               <text
                 x="50%"
                 y="50%"
                 textAnchor="middle"
                 dy=".3em"
-                fontSize="30" // Adjusted font size to fit the smaller circle
+                fontSize="100" // Adjusted font size to fit the new circle size
                 fill="white"
               >
                 {shotClock}
               </text>
             </svg>
-          </CCol>
 
-          <CCol sm={4}>
+          </CCol>
+          <CCol sm={3} style={{ textAlign: "right" }}>
             <CButton
               onClick={handleP2Extension}
               disabled={p2ExtensionUsed} // Disable after use
               style={{
-                margin: "20px",
+                margin: "30px 50px",
                 width: "100px",
                 height: "60px",
-                color: 'white',
+                color: "white",
                 background: p2ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
               }}
             >
               P2 Extension
             </CButton>
           </CCol>
-        </CRow>
 
-        <CRow className="justify-content-center" style={{ padding: "10px" }}>
-          {times?.map((time, index) => {
-            return (
-              <TimerButton key={time} handleTimeButtonClick={handleTimeButtonClick} time={time} selectedTime={selectedTime} />
-            )
-          })}
-        </CRow>
 
+          <div style={{ width: "100%", textAlign: "center" }}>
+            {times?.map((time, index) => {
+              return (
+                <TimerButton key={time} handleTimeButtonClick={handleTimeButtonClick} time={time} selectedTime={selectedTime} />
+              )
+            })}
+          </div>
+        </CRow>
       </div>
-
-
-
 
       <ActionButtons resetShotClock={resetShotClock} toggleShotClock={toggleShotClock} restartShotClock={restartShotClock}
         selectedTime={selectedTime} isRunning={isRunning} />

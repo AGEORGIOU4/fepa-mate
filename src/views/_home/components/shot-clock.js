@@ -8,7 +8,8 @@ const TimerButton = ({ handleTimeButtonClick, time, selectedTime }) => {
       onClick={() => handleTimeButtonClick(time)}
       style={{
         margin: "0 10px",
-        backgroundColor: selectedTime === time ? "#555555" : "", selectedTime
+        backgroundColor: selectedTime === time ? "#777777" : "", selectedTime,
+        scale: selectedTime === time ? "1.15" : "1"
       }}
     >
       {time}s
@@ -33,8 +34,8 @@ const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, sele
           onClick={() => resetShotClock(selectedTime)}
           style={{
             color: "white",
-            width: "80px", // Make the button take up the full column width
-            height: "80px",
+            width: "100px", // Make the button take up the full column width
+            height: "100px",
             background: "#ef376e",
             borderRadius: "100%"
           }}
@@ -48,8 +49,8 @@ const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, sele
           onClick={toggleShotClock}
           style={{
             color: "white",
-            width: "80px", // Make the button take up the full column width
-            height: "80px",
+            width: "100px", // Make the button take up the full column width
+            height: "100px",
             background: isRunning ? "#ffc107" : "#51cc8a",
             borderRadius: "100%"
           }}
@@ -64,8 +65,8 @@ const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, sele
           onClick={restartShotClock}
           style={{
             color: "white",
-            width: "80px", // Make the button take up the full column width
-            height: "80px",
+            width: "100px", // Make the button take up the full column width
+            height: "100px",
             background: "#007bff",
             borderRadius: "100%"
           }}
@@ -81,35 +82,38 @@ const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, sele
 const ExtensionButtons = ({ handleP1Extension, handleP2Extension, p1ExtensionUsed, p2ExtensionUsed }) => {
   return (
     <>
-      <div style={{ width: "100%", textAlign: 'center' }}>
-        <CButton
-          onClick={handleP1Extension}
-          disabled={p1ExtensionUsed} // Disable after use
-          style={{
-            margin: "20px",
-            width: "100px",
-            height: "60px",
-            color: "white",
-            background: p1ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
-          }}
-        >
-          P1 Extension
-        </CButton>
-
-        <CButton
-          onClick={handleP2Extension}
-          disabled={p2ExtensionUsed} // Disable after use
-          style={{
-            margin: "20px",
-            width: "100px",
-            height: "60px",
-            color: "white",
-            background: p2ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
-          }}
-        >
-          P2 Extension
-        </CButton>
-      </div>
+      <CRow style={{ textAlign: 'center', marginTop: "40px" }}>
+        <CCol xs={6}>
+          <CButton
+            onClick={handleP1Extension}
+            disabled={p1ExtensionUsed} // Disable after use
+            style={{
+              margin: "30px auto",
+              width: "100px",
+              height: "60px",
+              color: "white",
+              background: p1ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
+            }}
+          >
+            P1 Extension
+          </CButton>
+        </CCol>
+        <CCol xs={6}>
+          <CButton
+            onClick={handleP2Extension}
+            disabled={p2ExtensionUsed} // Disable after use
+            style={{
+              margin: "30px auto",
+              width: "100px",
+              height: "60px",
+              color: "white",
+              background: p2ExtensionUsed ? "#cccccc" : "#673AB7", // Disabled color
+            }}
+          >
+            P2 Extension
+          </CButton>
+        </CCol>
+      </CRow>
     </>
   )
 }
@@ -117,16 +121,16 @@ const ExtensionButtons = ({ handleP1Extension, handleP2Extension, p1ExtensionUse
 export const CShotClock = () => {
   const times = [60, 45, 30, 15];
 
-  const [defaultTime, setDefaultTime] = useState(60); // Default to 60 seconds
+  const [defaultTime, setDefaultTime] = useState(45); // Default to 60 seconds
   const [shotClock, setShotClock] = useState(defaultTime); // Default to 60 seconds
   const [timer, setTimer] = useState(null); // Timer reference
   const [isRunning, setIsRunning] = useState(false); // Track if the clock is running
-  const [selectedTime, setSelectedTime] = useState(60); // Track the selected time
+  const [selectedTime, setSelectedTime] = useState(45); // Track the selected time
 
   const [p1ExtensionUsed, setP1ExtensionUsed] = useState(false);
   const [p2ExtensionUsed, setP2ExtensionUsed] = useState(false);
 
-  const radius = 110;
+  const radius = 145;
   const circumference = 2 * Math.PI * radius;
 
   const beepSoundRef = useRef(new Audio('/beep.mp4'));
@@ -256,8 +260,8 @@ export const CShotClock = () => {
 
         }}>
         <svg
-          width="250"
-          height="250"
+          width="320"
+          height="320"
           onClick={handleCircleClick}
           style={{
             cursor: "pointer",
@@ -267,35 +271,37 @@ export const CShotClock = () => {
           }}
         >
           <circle
-            cx="125" // Center adjusted for new size
-            cy="125"
-            r="110" // Adjusted radius for new dimensions
+            cx="160" // Updated for new dimensions
+            cy="160"
+            r="145" // Updated radius for the new size
             stroke="lightgray"
-            strokeWidth="12" // Stroke width adjusted for better proportions
+            strokeWidth="14" // Adjusted stroke width proportionally
             fill="none"
           />
           <circle
-            cx="125"
-            cy="125"
-            r="110"
+            cx="160"
+            cy="160"
+            r="145"
             stroke={getStrokeColor(shotClock)}
-            strokeWidth="12"
+            strokeWidth="14"
             fill="dark"
-            strokeDasharray={circumference} // Update if circumference depends on radius
+            strokeDasharray={circumference} // Ensure circumference matches radius
             strokeDashoffset={((60 - shotClock) / 60) * circumference}
-            transform="rotate(-90 125 125)" // Rotation pivot updated for new center
+            transform="rotate(-90 160 160)" // Updated rotation pivot
           />
           <text
             x="50%"
             y="50%"
             textAnchor="middle"
             dy=".3em"
-            fontSize="35" // Adjusted font size to fit the new circle size
+            fontSize="130" // Adjusted for slightly larger size
             fill="white"
           >
             {shotClock}
           </text>
         </svg>
+
+
       </div>
 
 
