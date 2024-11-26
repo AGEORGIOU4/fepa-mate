@@ -18,50 +18,63 @@ const TimerButton = ({ handleTimeButtonClick, time, selectedTime }) => {
 
 const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, selectedTime, isRunning }) => {
   return (
-    <CRow className="justify-content-center text-center" style={{ position: "absolute", bottom: 20, textAlign: 'center', width: "-webkit-fill-available" }}>
-      <CCol xs={4}>
+    <CRow
+      className="justify-content-center"
+      style={{
+        padding: "10px",
+        position: "fixed",
+        bottom: 20,
+        left: 0,
+        right: 0,
+      }}
+    >
+      <CCol xs={4} className="text-center">
         <CButton
-          className="timer-button"
           onClick={() => resetShotClock(selectedTime)}
           style={{
-            width: "80px",
+            color: "white",
+            width: "80px", // Make the button take up the full column width
             height: "80px",
             background: "#ef376e",
+            borderRadius: "100%"
           }}
         >
           Reset
         </CButton>
       </CCol>
 
-      <CCol xs={4}>
+      <CCol xs={4} className="text-center">
         <CButton
-          className="timer-button"
           onClick={toggleShotClock}
           style={{
-            width: "80px",
+            color: "white",
+            width: "80px", // Make the button take up the full column width
             height: "80px",
             background: isRunning ? "#ffc107" : "#51cc8a",
+            borderRadius: "100%"
           }}
         >
           {isRunning ? "Pause" : "Start"}
         </CButton>
       </CCol>
 
-      <CCol xs={4}>
+      <CCol xs={4} className="text-center">
         <CButton
-          className="timer-button"
           disabled={!isRunning}
           onClick={restartShotClock}
           style={{
-            width: "80px",
+            color: "white",
+            width: "80px", // Make the button take up the full column width
             height: "80px",
             background: "#007bff",
+            borderRadius: "100%"
           }}
         >
           Restart
         </CButton>
       </CCol>
     </CRow>
+
   );
 };
 

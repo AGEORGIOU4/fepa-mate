@@ -41,41 +41,18 @@ const Home = () => {
     <>
 
       {/* <CImage style={{ position: 'absolute', top: 10, right: 10, width: '80px' }} src="fepa-logo.png" /> */}
-      <div className="min-vh-100 gradient-background">
-        <CTabs
-          activeItemKey={activeTab}
-          onChange={handleTabChange}
-        >
-          <CTabList variant="tabs">
-            <CTab itemKey="shot-clock">Shot Clock</CTab>
-            <CTab itemKey="setup">Set Up</CTab>
-            <CTab itemKey="match" disabled={!matchRunning}>Match</CTab>
-            {/* <CTab itemKey="streaming" >Streaming</CTab> */}
-          </CTabList>
-          <CTabContent
-            style={{
-              display: "flex",
-              flexDirection: "column", // Ensures vertical layout
-
-              justifyContent: "center", // Centers items horizontally (if applicable)
-              height: "80vh", // Ensures the container takes up the full viewport height
-            }}
-          >
-            <CTabPanel itemKey="setup">
-              <div style={{ position: 'absolute', bottom: 10 }} >
-                <InstallPWAButton />
-              </div>
-              <CSetup />
-            </CTabPanel>
-            <CTabPanel itemKey="match">
-              <CMatch />
-            </CTabPanel>
-            <CTabPanel itemKey="shot-clock">
-              {isLandscape ? <CShotClockLandscape /> : <CShotClock />}
-            </CTabPanel>
-
-          </CTabContent>
-        </CTabs>
+      <div
+        className="min-vh-100 gradient-background"
+        style={{
+          width: "100vw", // Full viewport width
+          height: "100vh", // Full viewport height
+          overflow: "hidden", // Prevent scrollbars
+          display: "flex", // Flexbox for layout
+          flexDirection: "column", // Stack children vertically
+          WebkitOverflowScrolling: "touch", // Smooth scrolling (fallback for content that might scroll inside)
+        }}
+      >
+        {isLandscape ? <CShotClockLandscape /> : <CShotClock />}
       </div>
     </>
   );
