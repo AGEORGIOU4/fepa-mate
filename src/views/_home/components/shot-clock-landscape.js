@@ -92,20 +92,19 @@ export const CShotClockLandscape = () => {
   const radius = 126;
   const circumference = 2 * Math.PI * radius;
 
-  const beepSoundRef = useRef(new Audio('/beep.mp4'));
+  const beepSoundRef = useRef(new Audio('/5seconds.mp4'));
 
   useEffect(() => {
     beepSoundRef.current.preload = "auto"; // Preload audio for faster playback
     beepSoundRef.current.crossOrigin = "anonymous"; // If hosted externally
   }, []);
 
+
   const getStrokeColor = (time) => {
-    if (time > 45) {
+    if (time > 15) {
       return "#51cc8a"; // Green for 45s-60s
-    } else if (time > 30) {
-      return "#51cc8a"; // Green for 30s-45s
-    } else if (time > 15) {
-      return "#ffc107"; // Yellow for 15s-30s
+    } else if (time > 9) {
+      return "#ffc107"; // Green for 30s-45s
     } else {
       return "#ef376e"; // Red for 0s-15s
     }
@@ -212,6 +211,18 @@ export const CShotClockLandscape = () => {
     };
   }, [timer]);
 
+  const [isRed, setIsRed] = useState(false); // State to toggle between colors
+
+  useEffect(() => {
+    if (shotClock < 10) {
+      const interval = setInterval(() => {
+        setIsRed((prev) => !prev); // Toggle the color
+      }, 200); // Change color every second
+      return () => clearInterval(interval); // Clean up interval on unmount
+    }
+  }, [shotClock]); // Empty dependency array to ensure it runs once on mount
+
+
   return (
     <>
 
@@ -268,8 +279,8 @@ export const CShotClockLandscape = () => {
                 y="50%"
                 textAnchor="middle"
                 dy=".3em"
-                fontSize="100" // Adjusted font size to fit the new circle size
-                fill="white"
+                fontSize={shotClock < 10 ? "180" : "110"} // Adjusted for slightly larger size
+                fill={isRed ? "#ef376e" : "white"} // Set fill color based on state
               >
                 {shotClock}
               </text>

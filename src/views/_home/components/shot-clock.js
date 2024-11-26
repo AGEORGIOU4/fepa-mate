@@ -134,7 +134,7 @@ export const CShotClock = () => {
   const radius = 145;
   const circumference = 2 * Math.PI * radius;
 
-  const beepSoundRef = useRef(new Audio('/beep.mp4'));
+  const beepSoundRef = useRef(new Audio('/5seconds.mp4'));
 
   useEffect(() => {
     beepSoundRef.current.preload = "auto"; // Preload audio for faster playback
@@ -142,16 +142,15 @@ export const CShotClock = () => {
   }, []);
 
   const getStrokeColor = (time) => {
-    if (time > 45) {
+    if (time > 15) {
       return "#51cc8a"; // Green for 45s-60s
-    } else if (time > 30) {
-      return "#51cc8a"; // Green for 30s-45s
-    } else if (time > 15) {
-      return "#ffc107"; // Yellow for 15s-30s
+    } else if (time > 9) {
+      return "#ffc107"; // Green for 30s-45s
     } else {
       return "#ef376e"; // Red for 0s-15s
     }
   };
+
 
   const playBeepIfNeeded = (time) => {
     if (time <= 5) {
@@ -254,6 +253,17 @@ export const CShotClock = () => {
     };
   }, [timer]);
 
+  const [isRed, setIsRed] = useState(false); // State to toggle between colors
+
+  useEffect(() => {
+    if (shotClock < 10) {
+      const interval = setInterval(() => {
+        setIsRed((prev) => !prev); // Toggle the color
+      }, 200); // Change color every second
+      return () => clearInterval(interval); // Clean up interval on unmount
+    }
+  }, [shotClock]); // Empty dependency array to ensure it runs once on mount
+
   return (
     <>
       <ExtensionButtons handleP1Extension={handleP1Extension} handleP2Extension={handleP2Extension} p1ExtensionUsed={p1ExtensionUsed} p2ExtensionUsed={p2ExtensionUsed} />
@@ -300,8 +310,8 @@ export const CShotClock = () => {
             y="50%"
             textAnchor="middle"
             dy=".3em"
-            fontSize="130" // Adjusted for slightly larger size
-            fill="white"
+            fontSize={shotClock < 10 ? "200" : "130"} // Adjusted for slightly larger size
+            fill={isRed ? "#ef376e" : "white"} // Set fill color based on state
           >
             {shotClock}
           </text>
