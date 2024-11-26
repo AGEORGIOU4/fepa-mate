@@ -48,7 +48,8 @@ const ActionButtons = ({ resetShotClock, toggleShotClock, restartShotClock, sele
           width: "100px", // Make the button take up the full column width
           height: "100px",
           background: isRunning ? "#ffc107" : "#51cc8a",
-          borderRadius: "100%"
+          borderRadius: "100%",
+          scale: isRunning ? "0.9" : "1",
         }}
       >
         {isRunning ? "Pause" : "Start"}
@@ -92,6 +93,11 @@ export const CShotClockLandscape = () => {
   const circumference = 2 * Math.PI * radius;
 
   const beepSoundRef = useRef(new Audio('/beep.mp4'));
+
+  useEffect(() => {
+    beepSoundRef.current.preload = "auto"; // Preload audio for faster playback
+    beepSoundRef.current.crossOrigin = "anonymous"; // If hosted externally
+  }, []);
 
   const getStrokeColor = (time) => {
     if (time > 45) {
