@@ -161,6 +161,7 @@ export const CShotClockLandscape = () => {
   };
 
   const resetShotClock = (time) => {
+    setIsRed(false);
     stopBeep(); // Stop the beep sound if it's playing
     setShotClock(time);
     stopShotClock(); // Clear the current timer
@@ -174,6 +175,7 @@ export const CShotClockLandscape = () => {
   };
 
   const restartShotClock = () => {
+    setIsRed(false);
     stopBeep(); // Stop the beep sound if it's playing
     setShotClock(selectedTime);
     stopShotClock(); // Clear the current timer
