@@ -203,7 +203,6 @@ export const CShotClock = () => {
   };
 
   const resetShotClock = (time) => {
-    setIsRed(false);
     stopBeep(); // Stop the beep sound if it's playing
     setShotClock(time);
     stopShotClock(); // Clear the current timer
@@ -217,7 +216,6 @@ export const CShotClock = () => {
   };
 
   const restartShotClock = () => {
-    setIsRed(false);
     stopBeep(); // Stop the beep sound if it's playing
     setShotClock(selectedTime);
     stopShotClock(); // Clear the current timer
@@ -263,7 +261,7 @@ export const CShotClock = () => {
         setIsRed((prev) => !prev); // Toggle the color
       }, 200); // Change color every second
       return () => clearInterval(interval); // Clean up interval on unmount
-    }
+    } else { setIsRed(false) }
   }, [shotClock]); // Empty dependency array to ensure it runs once on mount
 
   return (
