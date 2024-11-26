@@ -1,7 +1,7 @@
 {
-  "name": "FEPA Mate",
+  "name": "FEPA Timer",
   "version": "5.3.0",
-  "description": "Famagusta 8 Ball Pool Association App",
+  "description": "Famagusta 8 Ball Pool Association Timer",
   "config": {
     "theme": "bright",
     "zipPrefix": ".zip/coreui-pro-react-admin-template-theme",

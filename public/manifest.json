@@ -1,6 +1,6 @@
 {
-  "name": "FEPA Mate",
-  "short_name": "fepa-mate",
+  "name": "FEPA Timer",
+  "short_name": "fepa-timer",
   "theme_color": "#000000",
   "background_color": "#ffffff",
   "display": "standalone",
