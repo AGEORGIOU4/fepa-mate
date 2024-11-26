@@ -1,34 +1,26 @@
-import { cilCloudDownload } from '@coreui/icons';
-import CIcon from '@coreui/icons-react';
-import { CButton } from '@coreui/react-pro';
+import { CButton, CModal, CModalBody, CModalFooter, CModalHeader } from '@coreui/react-pro';
 import React, { useState, useEffect } from 'react';
 
-const isIos = () => {
-  return (
-    /iPhone|iPad|iPod/.test(navigator.userAgent) &&
-    navigator.userAgent.includes('Safari')
-  );
-};
-
-const isInStandaloneMode = () => ('standalone' in window.navigator) && window.navigator.standalone;
-
-
 const InstallPWAButton = () => {
-  const [showInstructions, setShowInstructions] = useState(false);
-
-  useEffect(() => {
-    if (isIos() && !isInStandaloneMode()) {
-      setShowInstructions(true);
-    }
-  }, []);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [showModal, setShowModal] = useState(false); // Control modal visibility
+  const [modalCount, setModalCount] = useState(0); // Track how many times the modal has been shown
 
   useEffect(() => {
+    // Load the modal count from local storage
+    const savedCount = parseInt(localStorage.getItem('pwaInstallModalCount')) || 0;
+    setModalCount(savedCount);
+
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault(); // Prevent the default mini-infobar
       setDeferredPrompt(e); // Save the event for triggering later
-      setIsInstallable(true); // Show the install button
+      setIsInstallable(true); // App is installable
+
+      // Show the modal if not installed and shown less than 3 times
+      if (savedCount < 3) {
+        setShowModal(true);
+      }
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -51,34 +43,45 @@ const InstallPWAButton = () => {
         }
 
         setDeferredPrompt(null); // Clear the prompt after user action
-        setIsInstallable(false); // Hide the install button
+        setIsInstallable(false); // Hide the install option
       });
+    }
+    closeModal(); // Close the modal
+  };
+
+  const closeModal = () => {
+    const newCount = modalCount + 1;
+    setModalCount(newCount);
+    localStorage.setItem('pwaInstallModalCount', newCount); // Save count to local storage
+
+    if (newCount < 3) {
+      setShowModal(true); // Show modal again if shown less than 3 times
+    } else {
+      setShowModal(false); // Stop showing the modal after 3 displays
     }
   };
 
   return (
     <>
-      {isInstallable && (
-        <CButton variant='ghost' onClick={handleInstallClick} style={{ padding: '10px', fontSize: '16px', color: 'white' }}>
-          <CIcon icon={cilCloudDownload} /> Install App
-        </CButton>
+      {isInstallable && modalCount < 3 && (
+        <>
+          {/* Modal */}
+          <CModal visible={showModal} onClose={closeModal}>
+            <CModalHeader>Install App</CModalHeader>
+            <CModalBody>
+              <p>Install this application to quickly access it from your home screen!</p>
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="primary" onClick={handleInstallClick}>
+                Install Now
+              </CButton>
+              <CButton color="secondary" onClick={closeModal}>
+                Cancel
+              </CButton>
+            </CModalFooter>
+          </CModal>
+        </>
       )}
-
-      {/* {!showInstructions && (
-        <div style={{
-          padding: '20px',
-          border: '1px solid #ccc',
-          textAlign: 'center'
-        }}>
-          <p>
-            To install this app:
-          </p>
-          <ol>
-            <li>Tap the <strong>Share</strong> button (the square with an arrow).</li>
-            <li>Scroll down and select <strong>Add to Home Screen</strong>.</li>
-          </ol>
-        </div>
-      )} */}
     </>
   );
 };
